@@ -1,0 +1,19 @@
+# RStudio user data
+.Rhistory
+.RData
+.Rproj.user/
+
+# Temporary files
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.Rapp.history
+
+# OS level garbage
+.DS_Store
+Thumbs.db
+
+# Temp folders
+*/tmp/
+*/temp/
