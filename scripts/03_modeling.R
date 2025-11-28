@@ -1,13 +1,13 @@
 library(survival)
 library(survimer)
+library(speff2trial)
+data("ACTG175")
 
-df = read.csv('data/cleaned-data.csv')
-View(df)
-
+df = read.csv('data/actg175.csv')
 
 model = glm(response ~  treatment + age + sex,df, family= 'binomial')
 summary(model)
 
-
-cox_model = coxph(Surv(time_to_event, event) ~ treatment + age + sex, df)
-summary(cox_model)
+exp(cbind(OR = coef(model), confint(model)))
+or_table <- exp(cbind(OR = coef(model), confint(model)))
+write.csv(or_table, "outputs/actg_odds_ratios.csv")
