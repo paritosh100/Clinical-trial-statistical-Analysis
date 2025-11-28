@@ -1,139 +1,106 @@
-# Clinical Trial Statistical Analysis (Simulated Data)
+# Clinical Trial Statistical Analysis
 
-This project explores the workflow of analyzing a simulated clinical trial dataset from beginning to end.
+This project explores the workflow of analyzing clinical trial data using both a simulated dataset and a real-world dataset (ACTG 175). The purpose was to understand how baseline characteristics, treatment assignment, and clinical outcomes behave across a study population. I wanted to see how much information a clinical dataset could reveal when processed through standard statistical procedures such as baseline summaries, logistic regression, and CD4 trajectory visualizations.
 
-The purpose was to understand how baseline characteristics, treatment assignment, and clinical outcomes behave across a study population. I wanted to see how much information a simple simulated dataset could reveal when processed through standard statistical procedures such as baseline summaries, logistic regression, and survival analysis.
-
-What I observed was that both treatment arms behaved very similarly. The survival curves were close to overlapping, the logistic regression model showed no strong predictors, and the Cox model did not identify meaningful differences. This was expected because the dataset was random, but it was useful to see how the full workflow behaves with neutral data.
-
-Next, I plan to expand the dataset with additional clinical variables, explore more subgroup analyses, and generate more TFL style summaries that resemble real clinical reporting.
-
-## Key Outputs
-
-### 1. Kaplan Meier Survival Curve
-Survival probability over time for the two treatment groups.
-![Plot](outputs/km_plot_ggplot.png)
-
-### 2. Baseline Characteristics Table
-Baseline demographic and clinical characteristics stratified by treatment.
-* *Continuous variables are reported as mean (SD).*
-* *Categorical variables are reported as n (%).*
-
-**File:** `outputs/baseline_btl.csv`
-
-### Baseline Characteristics Table
-
-| Characteristic                     | Drug           | Placebo        | p_value |
-|------------------------------------|----------------|----------------|---------|
-| n                                  | 149            | 151            |         |
-| age (mean (SD))                    | 54.54 (9.92)   | 54.99 (9.88)   | 0.694   |
-| sex = M (%)                        | 75 (50.3)      | 73 (48.3)      | 0.819   |
-| baseline_score (mean (SD))         | 49.64 (9.97)   | 49.05 (9.47)   | 0.599   |
-| risk_group = 1 (%)                 | 43 (28.9)      | 43 (28.5)      | 1.000   |
-| site_id (%)                        |                |                | 0.057   |
-| &nbsp;&nbsp;1                      | 36 (24.2)      | 26 (17.2)      |         |
-| &nbsp;&nbsp;2                      | 26 (17.4)      | 36 (23.8)      |         |
-| &nbsp;&nbsp;3                      | 29 (19.5)      | 31 (20.5)      |         |
-| &nbsp;&nbsp;4                      | 20 (13.4)      | 33 (21.9)      |         |
-| &nbsp;&nbsp;5                      | 38 (25.5)      | 25 (16.6)      |         |
-### 3. Model Results
-**Full outputs saved in:** `outputs/model_results.txt`
-
-The file contains the summaries for:
-* Logistic regression
-* Cox proportional hazards model
-* Odds ratios
-* Hazard ratios
-* Confidence intervals
-* Model level statistics
+The simulated dataset produced neutral results with minimal separation between treatment arms. The ACTG dataset, however, generated meaningful clinical patterns, including a clear treatment effect in CD4 response.
 
 ---
 
-## Project Purpose and Findings
+# Key Outputs
+
+## 1. Simulated Dataset: Kaplan Meier Survival Curve
+
+Survival probability over time for the two treatment groups.
+
+![KM Plot](outputs/km_plot_ggplot.png)
+
+---
+
+## 2. ACTG Baseline Characteristics
+
+Baseline demographic and clinical characteristics stratified by treatment.
+
+**File:** `outputs/actg_baseline_characteristics.csv`
+
+| Characteristic                     | Control        | Treatment      | p_value |
+|------------------------------------|----------------|----------------|---------|
+| n                                  | 532            | 1607           |         |
+| age (mean (SD))                    | 35.23 (8.85)   | 35.26 (8.66)   | 0.945   |
+| sex = Male (%)                     | —              | —              | —       |
+| baseline_score (mean (SD))         | 353.20 (114.11)| 349.61 (120.04)| 0.544   |
+| risk_group = 1 (%)                 | 129 (24.2%)    | 383 (23.8%)    | 0.892   |
+
+---
+
+## 3. Logistic Regression Results (ACTG)
+
+**File:** `outputs/actg_logistic_results.txt`
+
+### Odds Ratios for CD4 Response
+
+| Predictor           | OR    | 2.5%   | 97.5%  |
+|--------------------|-------|--------|--------|
+| Treatment          | 2.181 | 1.771  | 2.695  |
+| Age                | 0.995 | 0.985  | 1.005  |
+| Sex (Male vs Fem.) | 1.045 | 0.831  | 1.317  |
+
+**Interpretation:**  
+The treatment arm had more than twice the odds of achieving a positive CD4 response. Age and sex had no meaningful association with response.
+
+---
+
+## 4. CD4 Change Visualizations (ACTG)
+
+### A. Delta CD4 (Boxplot)
+
+![CD4 Delta Boxplot](outputs/actg_delta_boxplot.png)
+
+**Description:**  
+This plot shows the distribution of CD4 change from baseline to week 20. The treatment group demonstrates a higher median improvement.
+
+---
+
+### B. Baseline vs Follow-up CD4 Scatter
+
+![CD4 Scatter](outputs/actg_cd4_scatter.png)
+
+**Description:**  
+Each point represents a participant. Higher follow-up CD4 values cluster more strongly in the treatment arm, showing evidence of treatment benefit.
+
+---
+
+### C. CD4 Paired (Spaghetti) Plot
+
+![CD4 Paired Plot](outputs/actg_cd4_paired.png)
+
+**Description:**  
+Each line shows a participant’s CD4 trajectory from baseline to week 20. Most lines trend upward, reflecting overall improvement, with more pronounced gains in treated participants.
+
+---
+
+# Project Purpose and Findings
 
 ### Purpose
-* Simulate a small clinical trial dataset.
-* Derive simple clinical variables.
-* Apply logistic regression and survival analysis.
-* Generate summary tables and figures.
-* Observe how treatment groups differ at baseline and over time.
+- Simulate a small clinical trial dataset.
+- Analyze a real trial dataset (ACTG 175).
+- Derive clinical variables such as delta and response.
+- Generate baseline tables and CD4 plots.
+- Evaluate treatment effects via logistic regression.
 
 ### What I observed
-* Treatment arms looked similar in all analyses.
-* No large differences in survival curves.
-* No strong predictors in logistic regression.
-* Weak and non-significant effects in the Cox model.
-* Baseline characteristics were well balanced.
+- The simulated dataset showed minimal treatment differences.
+- The ACTG dataset demonstrated a strong treatment effect.
+- Baseline characteristics were balanced.
+- Age and sex were weak predictors of response.
+- CD4 trajectories confirmed improvement patterns.
 
 ### What this suggests
-The simulated dataset behaved like a neutral study with no major treatment effect. This is helpful for learning the workflow without being influenced by dramatic or unrealistic outcomes.
+The ACTG dataset provides a realistic demonstration of treatment effects on immune recovery. The simulated dataset serves as a useful sandbox for understanding the analysis workflow.
 
 ### Next steps
-* Add laboratory and vital sign variables.
-* Introduce more realistic event patterns.
-* Create more TFL style tables.
-* Analyze additional stratified subgroups.
-* Expand the number of endpoints.
-
----
-
-## Project Structure
-
-```text
-clinical_trial_stat/
-│
-├── data/
-│   └── clinical_trial.csv
-│
-├── scripts/
-│   ├── 01_data_generation.R
-│   ├── 02_data_cleaning.R
-│   ├── 03_analysis.R
-│   └── 04_tfl_generation.R
-│
-├── outputs/
-│   ├── baseline_characteristics.csv
-│   ├── km_plot.png
-│   └── model_results.txt
-│
-├── clinical_trial_stat.Rproj
-└── README.md
-```
-
-## Data and Methods
-### Data
-The dataset includes:
-
-- Demographic variables
-
-- Treatment assignment
-
-- Baseline and follow up scores
-
-- Binary response outcome
-
-- Time to event outcome
-
-- Derived fields: delta (change from baseline) and risk_group (age greater than 60)
-
-Methods
-- Baseline characteristics summary
-
-- Logistic regression for binary outcomes
-
-- Kaplan Meier estimation
-
-- Cox proportional hazards regression
-
-## Reproducibility
-### Run the analysis pipeline:
-```
-Rscript scripts/01_data_generation.R
-Rscript scripts/02_data_cleaning.R
-Rscript scripts/03_analysis.R
-Rscript scripts/04_tfl_generation.R
-```
-All outputs will be created in the outputs directory.
-
+- Add laboratory and vitals variables.
+- Create additional TFL-style tables.
+- Add subgroup analyses.
+- Expand endpoints and longitudinal modeling.
 
 ---
